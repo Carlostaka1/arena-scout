@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Northern Arena Scout | Demo</title>
+    <title>Northern Arena | Arena Scout Demo</title>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 </head>
-<body style="margin: 0; background-color: #f4f7f6; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column;">
+<body style="margin: 0; background-color: #004a4d; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column;">
 
-    <div style="text-align: center; padding: 20px; border-radius: 15px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 20px;">
-        <h1 style="color: #004a4d; margin-bottom: 10px;">Arena Scout</h1>
-        <p style="color: #666; line-height: 1.5;">Experience the future of Northern Arena's lead generation.</p>
-        <p style="font-weight: bold; color: #333;">Click the chat bubble in the bottom right to begin.</p>
+    <div style="text-align: center; padding: 40px; border-radius: 20px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 450px; margin: 20px;">
+        <h1 style="color: #004a4d; margin-bottom: 15px; font-size: 28px;">Northern Arena</h1>
+        <h2 style="color: #333; margin-bottom: 10px; font-size: 20px;">Arena Scout Demo</h2>
+        <p style="color: #666; line-height: 1.6; font-size: 16px;">Scan the QR code or click the bubble to experience automated lead generation and membership inquiry.</p>
+        <div style="margin-top: 20px; padding: 10px; border: 2px dashed #004a4d; border-radius: 10px; color: #004a4d; font-weight: bold;">
+            LIVE DEMO ACTIVE
+        </div>
     </div>
 
     <df-messenger
@@ -21,7 +24,9 @@
       language-code="en"
       max-query-length="-1">
       <df-messenger-chat-bubble
-        chat-title="Arena Scout">
+        chat-title="Arena Scout"
+        chat-title-icon="https://cdn-icons-png.flaticon.com/512/2907/2907150.png"
+        allow-fullscreen="true">
       </df-messenger-chat-bubble>
     </df-messenger>
 
@@ -29,13 +34,19 @@
       df-messenger {
         z-index: 999;
         position: fixed;
+        /* Matches Northern Arena's Teal Branding */
         --df-messenger-font-color: #000;
-        --df-messenger-font-family: sans-serif;
-        --df-messenger-chat-background: #f3f6fc;
-        --df-messenger-message-user-background: #d3e3fd;
-        --df-messenger-message-bot-background: #fff;
-        bottom: 24px;
-        right: 24px;
+        --df-messenger-font-family: 'Segoe UI', sans-serif;
+        --df-messenger-chat-background: #ffffff;
+        --df-messenger-message-user-background: #004a4d;
+        --df-messenger-message-user-font-color: #ffffff;
+        --df-messenger-message-bot-background: #f3f6fc;
+        --df-messenger-button-titlebar-color: #004a4d;
+        --df-messenger-button-titlebar-font-color: #ffffff;
+        --df-messenger-chat-bubble-background: #004a4d;
+        --df-messenger-chat-bubble-icon-color: #ffffff;
+        bottom: 30px;
+        right: 30px;
       }
     </style>
 </body>
