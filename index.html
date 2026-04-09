@@ -25,7 +25,7 @@
       max-query-length="-1">
       <df-messenger-chat-bubble
         chat-title="Arena Scout"
-        chat-title-icon="https://cdn-icons-png.flaticon.com/512/2907/2907150.png"
+        chat-icon="https://northernarena.co.nz/favicon.ico" 
         allow-fullscreen="true">
       </df-messenger-chat-bubble>
     </df-messenger>
@@ -34,7 +34,7 @@
       df-messenger {
         z-index: 999;
         position: fixed;
-        /* Matches Northern Arena's Teal Branding */
+        /* Custom UI Styling */
         --df-messenger-font-color: #000;
         --df-messenger-font-family: 'Segoe UI', sans-serif;
         --df-messenger-chat-background: #ffffff;
@@ -43,8 +43,8 @@
         --df-messenger-message-bot-background: #f3f6fc;
         --df-messenger-button-titlebar-color: #004a4d;
         --df-messenger-button-titlebar-font-color: #ffffff;
-        --df-messenger-chat-bubble-background: #004a4d;
-        --df-messenger-chat-bubble-icon-color: #ffffff;
+        --df-messenger-chat-bubble-background: #ffffff; /* White bubble so the logo pops */
+        --df-messenger-chat-bubble-icon-color: #004a4d;
         bottom: 30px;
         right: 30px;
       }
