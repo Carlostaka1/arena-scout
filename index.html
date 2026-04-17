@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     
     <style>
-        /* 1. The Background & Centering Layout */
+        /* 1. Background Setup */
         body, html {
             height: 100%;
             margin: 0;
@@ -16,17 +16,14 @@
             font-family: 'Google Sans', Arial, sans-serif;
             background: #000;
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center;     /* Center vertically */
-            overflow: hidden; 
+            justify-content: center; 
+            align-items: center;     
+            overflow: hidden;
         }
 
         .bg-image {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
             background-position: center;
             background-size: cover;
@@ -35,10 +32,36 @@
             transform: scale(1.1);
         }
 
-        /* 2. Centered Welcome Text (Above the Chat) */
+        /* 2. THE CENTER FORCE: Overriding the V1 Widget Positioning */
+        df-messenger {
+            z-index: 9999 !important;
+            position: fixed !important;
+            
+            /* Force to Center */
+            top: 55% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            
+            /* Kill the corner positioning */
+            bottom: auto !important;
+            right: auto !important;
+
+            /* Set the Portal Size */
+            --df-messenger-chat-window-height: 550px;
+            --df-messenger-chat-window-width: 500px;
+            
+            /* Theme colors */
+            --df-messenger-font-color: #000;
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-message-bot-background: #fff;
+            --df-messenger-button-titlebar-color: #004d99;
+        }
+
+        /* 3. Header Text */
         .header-container {
             position: absolute;
-            top: 12%;
+            top: 10%;
             text-align: center;
             color: white;
             z-index: 1;
@@ -59,32 +82,13 @@
             margin-top: 10px;
         }
 
-        /* 3. The "Search Bar" Style Messenger */
-        df-messenger {
-            z-index: 999;
-            --df-messenger-font-color: #000;
-            --df-messenger-font-family: 'Google Sans';
-            --df-messenger-chat-background: #f3f6fc;
-            --df-messenger-message-user-background: #d3e3fd;
-            --df-messenger-message-bot-background: #fff;
-            --df-messenger-button-titlebar-color: #004d99;
-            
-            /* Sizing the "Portal" */
-            --df-messenger-chat-window-height: 550px;
-            --df-messenger-chat-window-width: 500px;
-
-            /* Override the fixed bottom-right position to center it */
-            position: relative !important;
-            bottom: unset !important;
-            right: unset !important;
-        }
-
-        /* Mobile Optimization */
+        /* Mobile Fix: Full Screen */
         @media screen and (max-width: 600px) {
-            h1 { font-size: 2rem; }
+            h1 { font-size: 1.8rem; }
             df-messenger {
-                --df-messenger-chat-window-width: 90vw;
-                --df-messenger-chat-window-height: 70vh;
+                top: 50% !important;
+                --df-messenger-chat-window-width: 95vw;
+                --df-messenger-chat-window-height: 75vh;
             }
         }
     </style>
@@ -111,13 +115,14 @@
     </df-messenger>
 
     <script>
+      // 5. Force the expansion and buttons immediately
       const dfMessenger = document.querySelector('df-messenger');
       
       dfMessenger.addEventListener('df-messenger-loaded', () => {
-          // Force expand and keep it centered
+          // Trigger the open state
           dfMessenger.expand(); 
           
-          // Render the Quick Click buttons
+          // Render the Suggestion Chips
           dfMessenger.renderCustomCard([
             {
               "type": "suggestion_chips",
