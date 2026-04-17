@@ -10,8 +10,7 @@
             height: 100%; margin: 0; padding: 0;
             background: #000; overflow: hidden;
             display: flex; flex-direction: column; 
-            align-items: center; justify-content: center;
-            font-family: 'Google Sans', sans-serif;
+            align-items: center; font-family: 'Google Sans', sans-serif;
         }
 
         .bg-image {
@@ -21,25 +20,38 @@
             filter: blur(8px) brightness(30%); z-index: -1;
         }
 
+        /* 1. Position the Header */
         .header {
-            text-align: center; color: white; margin-bottom: 20px; z-index: 1;
+            text-align: center; 
+            color: white; 
+            margin-top: 50px; /* Space from the top */
+            z-index: 1;
         }
 
-        /* This creates the white "Search Bar" look in the center */
+        /* 2. Position the Chat Window */
         df-messenger {
             z-index: 999;
             position: fixed;
-            top: 55%;
+            top: 60%; /* Lowered it so it doesn't block the title */
             left: 50%;
             transform: translate(-50%, -50%);
-            --df-messenger-chat-window-height: 600px;
+            --df-messenger-chat-window-height: 550px;
             --df-messenger-chat-window-width: 500px;
             --df-messenger-button-titlebar-color: #004d99;
         }
 
-        /* This hides the floating bubble so only the window shows */
+        /* 3. Hide the floating bubble */
         df-messenger::part(button) {
             display: none !important;
+        }
+
+        /* Responsive Fix for Mobile */
+        @media (max-width: 600px) {
+            df-messenger {
+                --df-messenger-chat-window-width: 90vw;
+                --df-messenger-chat-window-height: 70vh;
+                top: 65%;
+            }
         }
     </style>
 </head>
@@ -48,8 +60,8 @@
     <div class="bg-image"></div>
 
     <div class="header">
-        <h1 style="margin:0; letter-spacing:3px; text-transform:uppercase;">Northern Arena</h1>
-        <p style="opacity:0.7;">The Arena Scout is online and ready.</p>
+        <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2.5rem;">Northern Arena</h1>
+        <p style="opacity:0.7; letter-spacing: 1px;">The Arena Scout is ready to assist you.</p>
     </div>
 
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
@@ -58,9 +70,8 @@
       project-id="arena-scout-492406"
       agent-id="26a84805-4e47-4747-b321-abee73640543"
       language-code="en"
-      expand="true"> <df-messenger-chat-bubble
-      chat-title="Arena Scout">
-      </df-messenger-chat-bubble>
+      expand="true">
+      <df-messenger-chat-bubble chat-title="Arena Scout"></df-messenger-chat-bubble>
     </df-messenger>
 
 </body>
