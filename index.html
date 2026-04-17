@@ -17,14 +17,14 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
             background-position: center; background-size: cover;
-            filter: blur(8px) brightness(30%); z-index: -1;
+            filter: blur(10px) brightness(30%); z-index: -1;
         }
 
         .header {
             text-align: center; color: white; margin-bottom: 25px; z-index: 1;
         }
 
-        /* THE FIX: We build the box first */
+        /* 1. The Container */
         .scout-portal {
             width: 480px;
             height: 600px;
@@ -36,13 +36,23 @@
             position: relative;
         }
 
-        /* We force the Messenger to fill this box exactly */
+        /* 2. FORCE THE CONTENT TO FILL THE BOX */
         df-messenger {
-            display: block;
             width: 100%;
             height: 100%;
-            --df-messenger-font-family: 'Google Sans';
-            --df-messenger-chat-background-color: #ffffff;
+        }
+
+        /* This is the secret sauce: it removes the floating bubble and pins the chat to the box */
+        df-messenger::part(button) {
+            display: none !important;
+        }
+
+        df-messenger::part(chat-wrapper) {
+            position: relative !important;
+            bottom: 0 !important;
+            right: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
         }
     </style>
 </head>
@@ -52,27 +62,28 @@
 
     <div class="header">
         <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2.2rem;">Northern Arena</h1>
-        <p style="opacity:0.7;">Your 24/7 fitness concierge is ready.</p>
+        <p style="opacity:0.7;">The Arena Scout is ready for your questions.</p>
     </div>
 
     <div class="scout-portal">
-        <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
         <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
         
         <df-messenger
           location="us-central1"
           project-id="arena-scout-492406"
           agent-id="26a84805-4e47-4747-b321-abee73640543"
-          language-code="en">
-          <df-messenger-chat-bubble chat-title="Arena Scout"></df-messenger-chat-bubble>
+          language-code="en"
+          expand="true"> <df-messenger-chat-bubble chat-title="Arena Scout"></df-messenger-chat-bubble>
         </df-messenger>
     </div>
 
     <script>
-      // This forces the modern messenger to open inside our portal
+      // Extra insurance: Force expand after half a second just in case
       const dfMessenger = document.querySelector('df-messenger');
       dfMessenger.addEventListener('df-messenger-loaded', () => {
-          dfMessenger.expand();
+          setTimeout(() => {
+              dfMessenger.expand();
+          }, 500);
       });
     </script>
 
