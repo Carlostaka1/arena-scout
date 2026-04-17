@@ -4,60 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Northern Arena | Arena Scout</title>
-</head>
-<body style="height: 100vh; margin: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Google Sans', sans-serif; overflow: hidden;">
-
-    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); background-position: center; background-size: cover; filter: blur(8px) brightness(30%); z-index: -1;"></div>
-
-    <div style="text-align: center; color: white; margin-bottom: 20px; z-index: 1;">
-        <h1 style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 5px; margin: 0;">Northern Arena</h1>
-        <p style="opacity: 0.7; font-size: 1.1rem; margin-top: 10px;">The Arena Scout is ready for your questions.</p>
-    </div>
-
-    <div id="portal-container" style="width: 500px; height: 600px; background: white; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.6); z-index: 2; overflow: hidden; position: relative;">
-        
-        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-        <df-messenger
-          id="embedded-scout"
-          project-id="arena-scout-492406"
-          agent-id="26a84805-4e47-4747-b321-abee73640543"
-          language-code="en">
-          <df-messenger-chat-bubble chat-title="Arena Scout"></df-messenger-chat-bubble>
-        </df-messenger>
-
-    </div>
-
-    <script>
-      const messenger = document.getElementById('embedded-scout');
-      
-      // Force the messenger to fill the container and open immediately
-      messenger.addEventListener('df-messenger-loaded', () => {
-          
-          // CSS variables to make the window fill the white box perfectly
-          messenger.style.setProperty('--df-messenger-chat-window-height', '600px');
-          messenger.style.setProperty('--df-messenger-chat-window-width', '500px');
-          
-          // Force open without needing a click
-          messenger.expand();
-
-          // Add the suggestion chips so they don't have to think of what to type
-          messenger.renderCustomCard([{
-              "type": "suggestion_chips",
-              "suggestions": [
-                {"text": "10 Days for $10 Trial"},
-                {"text": "Student/Senior Rates"},
-                {"text": "Book a Facility Tour"}
-              ]
-          }]);
-      });
-    </script>
-
     <style>
-        /* This hides the "Close" button and the floating bubble 
-           so the user can't accidentally close the portal */
-        df-messenger::part(button) { display: none !important; }
-        df-messenger::part(chat-wrapper) { bottom: 0 !important; right: 0 !important; }
+        body, html {
+            height: 100%; margin: 0; padding: 0;
+            background: #000; overflow: hidden;
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .bg-image {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
+            background-position: center; background-size: cover;
+            filter: blur(8px) brightness(30%); z-index: -1;
+        }
+
+        .header {
+            text-align: center; color: white; margin-bottom: 20px; z-index: 1;
+        }
+
+        /* THE BOX: This is the container for the AI */
+        .portal-frame {
+            width: 450px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden; /* Clips the AI to the rounded corners */
+            z-index: 2;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 500px) {
+            .portal-frame { width: 95vw; height: 75vh; }
+        }
     </style>
+</head>
+<body>
+
+    <div class="bg-image"></div>
+
+    <div class="header">
+        <h1 style="margin:0; letter-spacing:3px; text-transform:uppercase;">Northern Arena</h1>
+        <p style="opacity:0.7;">Your Arena Scout is online.</p>
+    </div>
+
+    <div class="portal-frame">
+        <iframe
+            allow="microphone;"
+            src="https://console.dialogflow.com/api-client/demo/embedded/26a84805-4e47-4747-b321-abee73640543">
+        </iframe>
+    </div>
 
 </body>
 </html>
