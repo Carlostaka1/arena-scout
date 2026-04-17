@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Northern Arena | Arena Scout</title>
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <style>
         body, html {
             height: 100%; margin: 0; padding: 0;
@@ -17,44 +18,38 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
             background-position: center; background-size: cover;
-            filter: blur(8px) brightness(30%); z-index: -1;
+            filter: blur(10px) brightness(30%); z-index: -1;
         }
 
         .header {
-            text-align: center; color: white; margin-bottom: 30px; z-index: 1;
+            text-align: center; color: white; margin-bottom: 25px; z-index: 1;
         }
 
-        /* 1. This creates the "Frame" Justin will see */
-        .scout-portal {
-            width: 450px;
+        /* The Portal Frame */
+        .portal-frame {
+            width: 480px;
             height: 600px;
             background: #fff;
             border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            overflow: hidden;
             z-index: 2;
             position: relative;
         }
 
-        /* 2. This forces the Dialogflow Widget to sit inside that frame */
+        /* Google's Custom Styles */
         df-messenger {
-            position: absolute;
-            inset: 0;
-            --df-messenger-chat-window-height: 100%;
-            --df-messenger-chat-window-width: 100%;
-            --df-messenger-button-titlebar-color: #004d99;
+            width: 100%;
+            height: 100%;
+            --df-messenger-font-color: #000;
+            --df-messenger-font-family: 'Google Sans';
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-message-bot-background: #fff;
         }
 
-        /* 3. Hide the floating button bubble */
-        df-messenger::part(button) {
-            display: none !important;
-        }
-
-        /* 4. Fix the internal container so it doesn't float away */
-        df-messenger::part(chat-wrapper) {
-            position: static !important;
-            height: 100% !important;
-            width: 100% !important;
-        }
+        /* Hide the default bubble */
+        df-messenger::part(button) { display: none !important; }
     </style>
 </head>
 <body>
@@ -63,16 +58,16 @@
 
     <div class="header">
         <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2.2rem;">Northern Arena</h1>
-        <p style="opacity:0.7;">The Arena Scout is ready to assist.</p>
+        <p style="opacity:0.7;">Your AI Fitness Concierge is ready.</p>
     </div>
 
-    <div class="scout-portal">
+    <div class="portal-frame">
         <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
         <df-messenger
-          location="us-central1"
           project-id="arena-scout-492406"
           agent-id="26a84805-4e47-4747-b321-abee73640543"
           language-code="en"
+          max-query-length="-1"
           expand="true"> <df-messenger-chat-bubble chat-title="Arena Scout"></df-messenger-chat-bubble>
         </df-messenger>
     </div>
