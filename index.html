@@ -4,38 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Northern Arena | Arena Scout</title>
+    
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    
     <style>
         /* 1. The Background: Blurry Gym Photo */
         body, html {
             height: 100%;
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden; /* Stops scrolling */
+            font-family: 'Google Sans', Arial, sans-serif;
+            overflow: hidden; 
             background: #000;
         }
 
         .bg-image {
-            /* REPLACE THIS URL with a high-res photo of Northern Arena/HYROX */
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            filter: blur(8px) brightness(50%); /* Makes the chat pop */
-            transform: scale(1.1); /* Prevents white edges from blur */
+            filter: blur(8px) brightness(40%); 
+            transform: scale(1.1);
         }
 
-        /* 2. The Messenger Styling */
+        /* 2. Your Specific Messenger Styling */
         df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000;
+            --df-messenger-font-family: 'Google Sans';
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-message-bot-background: #fff;
             --df-messenger-button-titlebar-color: #004d99; /* Northern Arena Blue */
-            --df-messenger-font-color: #ffffff;
-            --df-messenger-chat-background-color: #fafafa;
-            --df-messenger-send-icon: #004d99;
-            --df-messenger-user-message-background-color: #e6f2ff;
-            --df-messenger-input-box-color: #ffffff;
+            bottom: 16px;
+            right: 16px;
         }
 
-        /* 3. Welcome Text in Center */
+        /* 3. Welcome Text */
         .welcome-container {
             position: absolute;
             top: 40%;
@@ -48,14 +54,15 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
         }
 
         p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             opacity: 0.9;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
         }
     </style>
 </head>
@@ -65,33 +72,41 @@
 
     <div class="welcome-container">
         <h1>Northern Arena</h1>
-        <p>Your journey starts with a conversation. <br>The Arena Scout is ready to assist.</p>
+        <p>Your 24/7 fitness concierge. <br>The Arena Scout is ready to assist.</p>
     </div>
 
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/v2/messenger.js?v=1"></script>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     <df-messenger
-        intent="WELCOME"
-        chat-title="Arena Scout"
-        agent-id="YOUR_AGENT_ID" 
-        language-code="en"
-        location="YOUR_LOCATION"
-        expand="true"> </df-messenger>
+      project-id="arena-scout-492406"
+      agent-id="26a84805-4e47-4747-b321-abee73640543"
+      language-code="en"
+      max-query-length="-1"
+      allow-feedback="all">
+      <df-messenger-chat-bubble
+        chat-title="Arena_Scout">
+      </df-messenger-chat-bubble>
+    </df-messenger>
 
     <script>
-        // 5. Logic to show "Suggestion Chips" immediately on load
-        const dfMessenger = document.querySelector('df-messenger');
-        dfMessenger.addEventListener('df-messenger-loaded', () => {
-            dfMessenger.renderCustomCard([
-                {
-                    "type": "suggestion_chips",
-                    "suggestions": [
-                        {"text": "10 Days for $10 Trial"},
-                        {"text": "Student/Senior Rates"},
-                        {"text": "See the Facility (Tour)"}
-                    ]
-                }
-            ]);
-        });
+      // 5. Open and show suggestions immediately
+      const dfMessenger = document.querySelector('df-messenger');
+      
+      // Auto-open the chat window
+      dfMessenger.addEventListener('df-messenger-loaded', () => {
+          dfMessenger.expand(); 
+          
+          // Render the Quick Click buttons
+          dfMessenger.renderCustomCard([
+            {
+              "type": "suggestion_chips",
+              "suggestions": [
+                {"text": "10 Days for $10 Trial"},
+                {"text": "Student/Senior Rates"},
+                {"text": "Book a Facility Tour"}
+              ]
+            }
+          ]);
+      });
     </script>
 
 </body>
