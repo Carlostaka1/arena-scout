@@ -3,55 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Northern Arena | Arena Scout AI Demo</title>
-    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+    <title>Northern Arena | Arena Scout</title>
+    <style>
+        /* 1. The Background: Blurry Gym Photo */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Stops scrolling */
+            background: #000;
+        }
+
+        .bg-image {
+            /* REPLACE THIS URL with a high-res photo of Northern Arena/HYROX */
+            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            filter: blur(8px) brightness(50%); /* Makes the chat pop */
+            transform: scale(1.1); /* Prevents white edges from blur */
+        }
+
+        /* 2. The Messenger Styling */
+        df-messenger {
+            --df-messenger-button-titlebar-color: #004d99; /* Northern Arena Blue */
+            --df-messenger-font-color: #ffffff;
+            --df-messenger-chat-background-color: #fafafa;
+            --df-messenger-send-icon: #004d99;
+            --df-messenger-user-message-background-color: #e6f2ff;
+            --df-messenger-input-box-color: #ffffff;
+        }
+
+        /* 3. Welcome Text in Center */
+        .welcome-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1;
+            width: 80%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+    </style>
 </head>
-<body style="margin: 0; background: linear-gradient(135deg, #001f3f 0%, #003366 100%); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column;">
+<body>
 
-    <div style="text-align: center; padding: 45px; border-radius: 24px; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.3); max-width: 480px; margin: 20px;">
-        <h1 style="color: #003366; margin-bottom: 10px; font-size: 32px; letter-spacing: -1px;">Northern Arena</h1>
-        <h2 style="color: #d4af37; margin-bottom: 20px; font-size: 18px; text-transform: uppercase; letter-spacing: 2px;">AI Sales Development Scout</h2>
-        
-        <p style="color: #444; line-height: 1.6; font-size: 17px; margin-bottom: 25px;">
-            Automated 24/7 lead capture for <strong>Membership and Swim School inquiries</strong>. 
-            Designed to increase conversion rates while reducing front-desk workload.
-        </p>
+    <div class="bg-image"></div>
 
-        <div style="display: inline-block; padding: 12px 25px; border: 2px solid #003366; border-radius: 50px; color: #003366; font-weight: bold; font-size: 14px;">
-            READY FOR LIVE DEPLOYMENT
-        </div>
+    <div class="welcome-container">
+        <h1>Northern Arena</h1>
+        <p>Your journey starts with a conversation. <br>The Arena Scout is ready to assist.</p>
     </div>
 
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/v2/messenger.js?v=1"></script>
     <df-messenger
-      project-id="arena-scout-492406"
-      agent-id="26a84805-4e47-4747-b321-abee73640543"
-      language-code="en"
-      max-query-length="-1">
-      <df-messenger-chat-bubble
+        intent="WELCOME"
         chat-title="Arena Scout"
-        chat-icon="https://northernarena.co.nz/favicon.ico"
-        allow-fullscreen="true">
-      </df-messenger-chat-bubble>
-    </df-messenger>
+        agent-id="YOUR_AGENT_ID" 
+        language-code="en"
+        location="YOUR_LOCATION"
+        expand="true"> </df-messenger>
 
-    <style>
-      df-messenger {
-        z-index: 999;
-        position: fixed;
-        --df-messenger-font-color: #000;
-        --df-messenger-font-family: 'Segoe UI', sans-serif;
-        --df-messenger-chat-background: #ffffff;
-        --df-messenger-message-user-background: #003366;
-        --df-messenger-message-user-font-color: #ffffff;
-        --df-messenger-message-bot-background: #f0f4f8;
-        --df-messenger-button-titlebar-color: #003366;
-        --df-messenger-button-titlebar-font-color: #ffffff;
-        --df-messenger-chat-bubble-background: #ffffff;
-        --df-messenger-chat-bubble-icon-color: #003366;
-        bottom: 30px;
-        right: 30px;
-      }
-    </style>
+    <script>
+        // 5. Logic to show "Suggestion Chips" immediately on load
+        const dfMessenger = document.querySelector('df-messenger');
+        dfMessenger.addEventListener('df-messenger-loaded', () => {
+            dfMessenger.renderCustomCard([
+                {
+                    "type": "suggestion_chips",
+                    "suggestions": [
+                        {"text": "10 Days for $10 Trial"},
+                        {"text": "Student/Senior Rates"},
+                        {"text": "See the Facility (Tour)"}
+                    ]
+                }
+            ]);
+        });
+    </script>
+
 </body>
 </html>
