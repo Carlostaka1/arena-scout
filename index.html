@@ -30,8 +30,8 @@
         .portal-frame {
             width: 480px;
             height: 600px;
-            max-width: 90%; /* Ensures it doesn't break on mobile */
-            max-height: 70vh;
+            max-width: 90%; 
+            max-height: 75vh;
             background: #fff;
             border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.6);
@@ -40,7 +40,7 @@
             position: relative;
         }
 
-        /* Google's Custom Styles - Optimized for Inline */
+        /* Fixed styles for the Chat inside the box */
         df-messenger {
             width: 100%;
             height: 100%;
@@ -51,10 +51,10 @@
             --df-messenger-message-bot-background: #fff;
         }
 
-        /* Responsive adjustments for smaller screens */
+        /* Makes the header responsive for your phone */
         @media (max-width: 600px) {
             .header h1 { font-size: 1.5rem !important; }
-            .portal-frame { height: 500px; }
+            .portal-frame { height: 550px; }
         }
     </style>
 </head>
@@ -64,4 +64,22 @@
 
     <div class="header">
         <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2.2rem;">Northern Arena</h1>
-        <p style="opacity:0.7;">Your
+        <p style="opacity:0.7;">Your AI Fitness Concierge is ready.</p>
+    </div>
+
+    <div class="portal-frame">
+        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+        <df-messenger
+          project-id="arena-scout-492406"
+          agent-id="26a84805-4e47-4747-b321-abee73640543"
+          language-code="en"
+          max-query-length="-1"
+          allow-unauthenticated="true"> <df-messenger-chat 
+            chat-title="Arena Scout"
+            intent="WELCOME"> </df-messenger-chat>
+          
+        </df-messenger>
+    </div>
+
+</body>
+</html>
