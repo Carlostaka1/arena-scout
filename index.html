@@ -19,42 +19,45 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
             background-position: center; background-size: cover;
-            filter: blur(10px) brightness(30%); z-index: -1;
+            filter: blur(8px) brightness(40%); z-index: -1;
         }
 
         .header {
-            text-align: center; color: white; margin-bottom: 25px; z-index: 1;
+            text-align: center; color: white; margin-bottom: 20px; z-index: 1;
         }
 
-        /* The Portal Frame */
+        /* The Portal Frame - Now smaller and glass-like */
         .portal-frame {
-            width: 480px;
-            height: 600px;
+            width: 400px; /* Reduced from 480px */
+            height: 550px; /* Reduced from 600px */
             max-width: 90%; 
-            max-height: 75vh;
-            background: #fff;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            max-height: 70vh;
+            /* Semi-transparent background */
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(15px); /* This creates the frosted glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             overflow: hidden;
             z-index: 2;
-            position: relative;
         }
 
-        /* Fixed styles for the Chat inside the box */
+        /* Customizing the Agent for transparency */
         df-messenger {
             width: 100%;
             height: 100%;
-            --df-messenger-font-color: #000;
             --df-messenger-font-family: 'Google Sans';
-            --df-messenger-chat-background: #f3f6fc;
-            --df-messenger-message-user-background: #d3e3fd;
-            --df-messenger-message-bot-background: #fff;
+            --df-messenger-font-color: #ffffff; /* White text for better contrast on glass */
+            /* Making the chat area transparent */
+            --df-messenger-chat-background: rgba(0, 0, 0, 0.3); 
+            --df-messenger-message-bot-background: rgba(255, 255, 255, 0.9);
+            --df-messenger-message-user-background: #007bff;
+            --df-messenger-titlebar-background: rgba(0, 0, 0, 0.5);
         }
 
-        /* Makes the header responsive for your phone */
         @media (max-width: 600px) {
-            .header h1 { font-size: 1.5rem !important; }
-            .portal-frame { height: 550px; }
+            .header h1 { font-size: 1.4rem !important; }
+            .portal-frame { height: 500px; width: 95%; }
         }
     </style>
 </head>
@@ -63,8 +66,8 @@
     <div class="bg-image"></div>
 
     <div class="header">
-        <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2.2rem;">Northern Arena</h1>
-        <p style="opacity:0.7;">Your AI Fitness Concierge is ready.</p>
+        <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2rem;">Northern Arena</h1>
+        <p style="opacity:0.8; font-size: 0.9rem;">Your AI Fitness Concierge</p>
     </div>
 
     <div class="portal-frame">
@@ -74,9 +77,12 @@
           agent-id="26a84805-4e47-4747-b321-abee73640543"
           language-code="en"
           max-query-length="-1"
-          allow-unauthenticated="true"> <df-messenger-chat 
+          allow-unauthenticated="true">
+          
+          <df-messenger-chat 
             chat-title="Arena Scout"
-            intent="WELCOME"> </df-messenger-chat>
+            intent="WELCOME">
+          </df-messenger-chat>
           
         </df-messenger>
     </div>
