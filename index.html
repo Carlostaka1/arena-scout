@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Northern Arena | Arena Scout</title>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    
     <style>
         body, html {
             height: 100%; margin: 0; padding: 0;
@@ -29,6 +30,8 @@
         .portal-frame {
             width: 480px;
             height: 600px;
+            max-width: 90%; /* Ensures it doesn't break on mobile */
+            max-height: 70vh;
             background: #fff;
             border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.6);
@@ -37,7 +40,7 @@
             position: relative;
         }
 
-        /* Google's Custom Styles */
+        /* Google's Custom Styles - Optimized for Inline */
         df-messenger {
             width: 100%;
             height: 100%;
@@ -48,8 +51,11 @@
             --df-messenger-message-bot-background: #fff;
         }
 
-        /* Hide the default bubble */
-        df-messenger::part(button) { display: none !important; }
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5rem !important; }
+            .portal-frame { height: 500px; }
+        }
     </style>
 </head>
 <body>
@@ -58,19 +64,4 @@
 
     <div class="header">
         <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 2.2rem;">Northern Arena</h1>
-        <p style="opacity:0.7;">Your AI Fitness Concierge is ready.</p>
-    </div>
-
-    <div class="portal-frame">
-        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-        <df-messenger
-          project-id="arena-scout-492406"
-          agent-id="26a84805-4e47-4747-b321-abee73640543"
-          language-code="en"
-          max-query-length="-1"
-          expand="true"> <df-messenger-chat-bubble chat-title="Arena Scout"></df-messenger-chat-bubble>
-        </df-messenger>
-    </div>
-
-</body>
-</html>
+        <p style="opacity:0.7;">Your
