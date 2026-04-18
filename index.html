@@ -26,50 +26,48 @@
             text-align: center; color: white; margin-bottom: 20px; z-index: 1;
         }
 
-        /* The Portal Frame - Frosted Glass Container */
         .portal-frame {
-            width: 360px; /* Even more compact */
-            height: 500px;
+            width: 360px;
+            height: 520px;
             max-width: 90%; 
             background: rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
+            border-radius: 28px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             overflow: hidden;
             z-index: 2;
         }
 
-        /* STYLING THE WIDGET INTERNALS */
+        /* 2026 GOOGLE CSS VARIABLE FIXES */
         df-messenger {
-            width: 100%;
-            height: 100%;
             --df-messenger-font-family: 'Google Sans';
+            
+            /* The Chat Window */
+            --df-messenger-chat-background: rgba(0, 0, 0, 0); 
+            --df-messenger-titlebar-background: rgba(0, 0, 0, 0.6);
             --df-messenger-font-color: #ffffff;
-            
-            /* Backgrounds */
-            --df-messenger-chat-background: rgba(0, 0, 0, 0); /* Force transparent */
-            --df-messenger-titlebar-background: rgba(0, 0, 0, 0.5);
-            
-            /* Messages */
-            --df-messenger-message-bot-background: rgba(255, 255, 255, 0.15);
-            --df-messenger-message-user-background: #1a73e8;
-            
-            /* THE FIX FOR THE INPUT BOX */
-            --df-messenger-input-background: rgba(0, 0, 0, 0.6); /* Dark background for typing */
-            --df-messenger-input-font-color: #ffffff; /* White text for typing */
-            --df-messenger-input-placeholder-font-color: rgba(255, 255, 255, 0.5);
+
+            /* THE TYPING BOX (The fix you need) */
+            --df-messenger-input-background: #1a1a1a; /* Solid dark grey so you can see text */
+            --df-messenger-input-font-color: #ffffff; /* Brilliant white text */
+            --df-messenger-input-placeholder-font-color: #888888;
+            --df-messenger-send-icon: #ffffff;
+
+            /* Message Bubbles */
+            --df-messenger-message-bot-background: rgba(255, 255, 255, 0.2);
+            --df-messenger-message-user-background: #007bff;
         }
 
-        /* Reaching inside the Shadow DOM */
+        /* Reaching inside the Shadow DOM to kill the black background */
         df-messenger::part(chat-window) {
-            background: transparent !important;
+            background-color: transparent !important;
         }
 
         @media (max-width: 600px) {
             .header h1 { font-size: 1.5rem !important; }
-            .portal-frame { height: 450px; }
+            .portal-frame { height: 480px; }
         }
     </style>
 </head>
@@ -83,20 +81,4 @@
     </div>
 
     <div class="portal-frame">
-        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-        <df-messenger
-          project-id="arena-scout-492406"
-          agent-id="26a84805-4e47-4747-b321-abee73640543"
-          language-code="en"
-          max-query-length="-1"
-          allow-unauthenticated="true">
-          
-          <df-messenger-chat 
-            chat-title="Arena Scout"
-            intent="WELCOME">
-          </df-messenger-chat>
-        </df-messenger>
-    </div>
-
-</body>
-</html>
+        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></
