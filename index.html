@@ -4,19 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Northern Arena | Arena Scout</title>
-    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-    
+    <!-- REMOVED the default theme CSS import — it was overriding everything -->
+
     <style>
+        /* Override df-messenger defaults at :root level so they win */
+        :root {
+            --df-messenger-chat-background: transparent;
+            --df-messenger-chat-bubble-background: transparent;
+            --df-messenger-input-background: rgba(255,255,255,0.12);
+            --df-messenger-input-box-background: rgba(255,255,255,0.12);
+            --df-messenger-titlebar-background: rgba(255,255,255,0.1);
+            --df-messenger-titlebar-font-color: #ffffff;
+            --df-messenger-message-bot-background: rgba(255,255,255,0.15);
+            --df-messenger-message-user-background: rgba(180,210,255,0.3);
+            --df-messenger-font-color: #ffffff;
+            --df-messenger-element-font-color: #ffffff;
+            --df-messenger-border-color: rgba(255,255,255,0.2);
+            --df-messenger-primary-color: #a8c7fa;
+        }
+
         body, html {
             height: 100%; margin: 0; padding: 0;
             background: #000; overflow: hidden;
-            display: flex; flex-direction: column; 
+            display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             font-family: 'Google Sans', sans-serif;
         }
         .bg-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
+            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070');
             background-position: center; background-size: cover;
             filter: blur(10px) brightness(30%); z-index: -1;
         }
@@ -37,18 +53,6 @@
         }
         df-messenger {
             width: 100%; height: 100%;
-            --df-messenger-font-color: #fff;
-            --df-messenger-font-family: 'Google Sans';
-            --df-messenger-chat-background: transparent;
-            --df-messenger-message-user-background: rgba(180,210,255,0.3);
-            --df-messenger-message-bot-background: rgba(255,255,255,0.15);
-            --df-messenger-message-user-font-color: #fff;
-            --df-messenger-message-bot-font-color: #fff;
-            --df-messenger-input-background: rgba(255,255,255,0.15);
-            --df-messenger-input-font-color: #fff;
-            --df-messenger-input-placeholder-font-color: rgba(255,255,255,0.5);
-            --df-messenger-input-border-color: rgba(255,255,255,0.25);
-            --df-messenger-send-icon: #fff;
         }
         @media (max-width: 600px) {
             .header h1 { font-size: 1.5rem !important; }
@@ -73,79 +77,5 @@
           <df-messenger-chat chat-title="Arena Scout" intent="WELCOME"></df-messenger-chat>
         </df-messenger>
     </div>
-
-    <script>
-        const css = `
-            :host { background: transparent !important; }
-            * { box-sizing: border-box; }
-            div, section, aside, main, article, header, footer {
-                background-color: transparent !important;
-            }
-            /* Input field */
-            input, textarea {
-                background: rgba(255,255,255,0.15) !important;
-                background-color: rgba(255,255,255,0.15) !important;
-                color: #fff !important;
-                border: 1px solid rgba(255,255,255,0.3) !important;
-                border-radius: 8px !important;
-                caret-color: #fff !important;
-            }
-            input::placeholder, textarea::placeholder {
-                color: rgba(255,255,255,0.5) !important;
-            }
-            /* Title bar */
-            [class*="title"], [class*="header"] {
-                background: rgba(255,255,255,0.1) !important;
-                color: #fff !important;
-            }
-            /* Send button & icons */
-            button { background: transparent !important; }
-            svg, path { fill: #fff !important; color: #fff !important; }
-            /* Scrollbar */
-            ::-webkit-scrollbar { width: 4px; }
-            ::-webkit-scrollbar-track { background: transparent; }
-            ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        `;
-
-        function injectIntoShadow(shadowRoot) {
-            if (!shadowRoot || shadowRoot._injected) return;
-            shadowRoot._injected = true;
-            const style = document.createElement('style');
-            style.textContent = css;
-            shadowRoot.appendChild(style);
-            // Watch this shadow root for new children with their own shadow roots
-            new MutationObserver(() => {
-                shadowRoot.querySelectorAll('*').forEach(el => {
-                    if (el.shadowRoot) injectIntoShadow(el.shadowRoot);
-                });
-            }).observe(shadowRoot, { childList: true, subtree: true });
-        }
-
-        function watchForShadowRoots(root) {
-            new MutationObserver(mutations => {
-                mutations.forEach(m => {
-                    m.addedNodes.forEach(node => {
-                        if (node.nodeType === 1) {
-                            if (node.shadowRoot) injectIntoShadow(node.shadowRoot);
-                            node.querySelectorAll && node.querySelectorAll('*').forEach(el => {
-                                if (el.shadowRoot) injectIntoShadow(el.shadowRoot);
-                            });
-                        }
-                    });
-                });
-            }).observe(root, { childList: true, subtree: true });
-        }
-
-        // Start watching the whole document immediately
-        watchForShadowRoots(document.body);
-
-        // Also manually scan on load and after delays
-        function scanAll() {
-            document.querySelectorAll('*').forEach(el => {
-                if (el.shadowRoot) injectIntoShadow(el.shadowRoot);
-            });
-        }
-        [0, 300, 800, 1500, 3000].forEach(d => setTimeout(scanAll, d));
-    </script>
 </body>
 </html>
