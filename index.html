@@ -13,7 +13,8 @@
             --df-messenger-input-box-background: rgba(255,255,255,0.12);
             --df-messenger-titlebar-background: rgba(255,255,255,0.08);
             --df-messenger-titlebar-font-color: #ffffff;
-            --df-messenger-message-bot-background: rgba(0,0,0,0.4);
+            --df-messenger-message-bot-background: #ffffff;
+            --df-messenger-message-bot-font-color: #000000;
             --df-messenger-message-user-background: rgba(180,210,255,0.25);
             --df-messenger-font-color: #ffffff;
             --df-messenger-element-font-color: #ffffff;
@@ -26,11 +27,9 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             font-family: 'Google Sans', sans-serif;
-            /* Background on body itself so everything is covered */
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070');
             background-position: center; background-size: cover;
         }
-        /* Dark overlay on top of body background */
         body::before {
             content: '';
             position: fixed; inset: 0;
@@ -52,7 +51,6 @@
             overflow: hidden;
             position: relative; z-index: 1;
         }
-        /* Background inside the frame matches exactly */
         .portal-frame::before {
             content: '';
             position: absolute; inset: 0;
