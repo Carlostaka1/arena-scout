@@ -19,51 +19,57 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070'); 
             background-position: center; background-size: cover;
-            filter: blur(8px) brightness(40%); z-index: -1;
+            filter: blur(8px) brightness(35%); z-index: -1;
         }
 
         .header {
             text-align: center; color: white; margin-bottom: 20px; z-index: 1;
         }
 
-        /* The Portal Frame - Sleeker & Transparent */
+        /* The Portal Frame - Frosted Glass Container */
         .portal-frame {
-            width: 380px; /* Slimmer */
-            height: 520px; /* Shorter */
-            max-width: 95%; 
-            background: rgba(255, 255, 255, 0.1); /* Very thin white tint */
-            backdrop-filter: blur(12px); /* Glass effect */
-            -webkit-backdrop-filter: blur(12px);
+            width: 360px; /* Even more compact */
+            height: 500px;
+            max-width: 90%; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             overflow: hidden;
             z-index: 2;
         }
 
-        /* STYLING THE "GHOST" PARTS 
-           This forces the internal Dialogflow boxes to be see-through
-        */
+        /* STYLING THE WIDGET INTERNALS */
         df-messenger {
+            width: 100%;
+            height: 100%;
             --df-messenger-font-family: 'Google Sans';
-            --df-messenger-chat-background: transparent; /* No more black/white box */
-            --df-messenger-message-user-background: #007bff;
-            --df-messenger-message-bot-background: rgba(255, 255, 255, 0.85);
-            --df-messenger-font-color: #fff;
+            --df-messenger-font-color: #ffffff;
+            
+            /* Backgrounds */
+            --df-messenger-chat-background: rgba(0, 0, 0, 0); /* Force transparent */
+            --df-messenger-titlebar-background: rgba(0, 0, 0, 0.5);
+            
+            /* Messages */
+            --df-messenger-message-bot-background: rgba(255, 255, 255, 0.15);
+            --df-messenger-message-user-background: #1a73e8;
+            
+            /* THE FIX FOR THE INPUT BOX */
+            --df-messenger-input-background: rgba(0, 0, 0, 0.6); /* Dark background for typing */
+            --df-messenger-input-font-color: #ffffff; /* White text for typing */
+            --df-messenger-input-placeholder-font-color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Targeting internal Google parts specifically */
+        /* Reaching inside the Shadow DOM */
         df-messenger::part(chat-window) {
             background: transparent !important;
         }
 
-        df-messenger::part(titlebar) {
-            background: rgba(0, 0, 0, 0.4) !important;
-        }
-
         @media (max-width: 600px) {
-            .header h1 { font-size: 1.4rem !important; }
-            .portal-frame { height: 480px; width: 90%; }
+            .header h1 { font-size: 1.5rem !important; }
+            .portal-frame { height: 450px; }
         }
     </style>
 </head>
@@ -73,7 +79,7 @@
 
     <div class="header">
         <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size: 1.8rem;">Northern Arena</h1>
-        <p style="opacity:0.8; font-size: 0.85rem;">Fitness Concierge Service</p>
+        <p style="opacity:0.7; font-size: 0.8rem;">Your AI Fitness Concierge</p>
     </div>
 
     <div class="portal-frame">
@@ -89,7 +95,6 @@
             chat-title="Arena Scout"
             intent="WELCOME">
           </df-messenger-chat>
-          
         </df-messenger>
     </div>
 
