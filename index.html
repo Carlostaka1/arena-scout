@@ -22,19 +22,26 @@
         }
         body, html {
             height: 100%; margin: 0; padding: 0;
-            background: #000; overflow: hidden;
+            overflow: hidden;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             font-family: 'Google Sans', sans-serif;
-        }
-        .bg-image {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            /* Background on body itself so everything is covered */
             background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2070');
             background-position: center; background-size: cover;
-            filter: blur(10px) brightness(30%); z-index: -1;
+        }
+        /* Dark overlay on top of body background */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 0;
         }
         .header {
-            text-align: center; color: white; margin-bottom: 25px; z-index: 1;
+            text-align: center; color: white; margin-bottom: 25px;
+            position: relative; z-index: 1;
         }
         .portal-frame {
             width: 400px; height: 550px;
@@ -43,8 +50,9 @@
             border: 1px solid rgba(255,255,255,0.15);
             box-shadow: 0 25px 50px rgba(0,0,0,0.4);
             overflow: hidden;
-            z-index: 2; position: relative;
+            position: relative; z-index: 1;
         }
+        /* Background inside the frame matches exactly */
         .portal-frame::before {
             content: '';
             position: absolute; inset: 0;
@@ -65,7 +73,6 @@
     </style>
 </head>
 <body>
-    <div class="bg-image"></div>
     <div class="header">
         <h1 style="margin:0; letter-spacing:4px; text-transform:uppercase; font-size:2.2rem;">Northern Arena</h1>
         <p style="opacity:0.7;">Arena Scout is Online</p>
