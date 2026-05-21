@@ -9,8 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-
     <style>
         :root {
             --sand:        #faf6f0;
@@ -20,24 +18,6 @@
             --pool-deep:   #1a5d7a;
             --sunset:      #ff7a5c;
             --sunset-soft: #ffb89d;
-
-            /* df-messenger theming — casual & clean */
-            --df-messenger-chat-background: #faf6f0;
-            --df-messenger-input-background: #ffffff;
-            --df-messenger-input-box-background: #ffffff;
-            --df-messenger-input-font-color: #1a2331;
-            --df-messenger-input-placeholder-font-color: #9aa4b2;
-            --df-messenger-titlebar-background: #1a2331;
-            --df-messenger-titlebar-font-color: #ffffff;
-            --df-messenger-titlebar-font-family: 'Plus Jakarta Sans', sans-serif;
-            --df-messenger-message-bot-background: #ffffff;
-            --df-messenger-message-bot-font-color: #1a2331;
-            --df-messenger-message-user-background: #2b8aab;
-            --df-messenger-message-user-font-color: #ffffff;
-            --df-messenger-font-color: #1a2331;
-            --df-messenger-font-family: 'Plus Jakarta Sans', sans-serif;
-            --df-messenger-send-icon-color: #2b8aab;
-            --df-messenger-primary-color: #2b8aab;
         }
 
         * { box-sizing: border-box; }
@@ -61,7 +41,7 @@
             position: relative;
         }
 
-        /* ── Split background images ─────────────────────────── */
+        /* Split background images */
         .bg-img {
             position: fixed;
             inset: 0;
@@ -83,13 +63,7 @@
             clip-path: polygon(62% 0, 100% 0, 100% 100%, 38% 100%);
         }
 
-        /* Tinted overlays — cool on swim side, warm on gym side */
-        .tint {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
+        .tint { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
         .tint-swim {
             background: linear-gradient(135deg, rgba(26, 93, 122, 0.7) 0%, rgba(43, 138, 171, 0.45) 100%);
             clip-path: polygon(0 0, 62% 0, 38% 100%, 0 100%);
@@ -99,16 +73,12 @@
             clip-path: polygon(62% 0, 100% 0, 100% 100%, 38% 100%);
         }
 
-        /* Soft vignette */
         .vignette {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
+            position: fixed; inset: 0; z-index: 2; pointer-events: none;
             background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 100%);
         }
 
-        /* ── Hero copy ────────────────────────────────────────── */
+        /* Hero copy */
         .hero {
             text-align: center;
             color: var(--sand);
@@ -145,76 +115,118 @@
             letter-spacing: -0.02em;
             color: #ffffff;
         }
-        .hero h1 .accent {
-            font-style: italic;
-            color: var(--sunset-soft);
-            font-weight: 500;
-        }
+        .hero h1 .accent { font-style: italic; color: var(--sunset-soft); font-weight: 500; }
 
-        .hero p {
-            font-size: 1.05rem;
-            line-height: 1.55;
-            margin: 0;
-            color: var(--ink-soft);
-            font-weight: 400;
-        }
+        .hero p { font-size: 1.05rem; line-height: 1.55; margin: 0; color: var(--ink-soft); font-weight: 400; }
         .hero p .pill {
-            display: inline-block;
-            padding: 2px 10px;
-            margin: 0 2px;
+            display: inline-block; padding: 2px 10px; margin: 0 2px;
             background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 0.95em;
-            color: #ffffff;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border-radius: 999px; font-weight: 600; font-size: 0.95em; color: #ffffff;
         }
 
-        /* ── Chat portal ──────────────────────────────────────── */
+        /* Chat portal */
         .portal-frame {
-            position: relative;
-            z-index: 5;
-            width: 420px;
-            height: 560px;
-            max-width: 100%;
-            max-height: 68vh;
-            border-radius: 20px;
-            overflow: hidden;
+            position: relative; z-index: 5;
+            width: 420px; height: 560px;
+            max-width: 100%; max-height: 68vh;
+            border-radius: 20px; overflow: hidden;
             background: #faf6f0;
-            box-shadow:
-                0 30px 70px rgba(0, 0, 0, 0.35),
-                0 0 0 1px rgba(255,255,255,0.1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255,255,255,0.1);
             animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        df-messenger {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 1;
-            background: transparent !important;
+        /* Chat header */
+        .chat-head {
+            background: var(--ink);
+            color: #fff;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex; align-items: center; gap: 10px;
+            flex-shrink: 0;
         }
-        df-messenger-chat {
-            width: 100%;
-            height: 100%;
+        .chat-head .av {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--pool) 0%, var(--sunset) 100%);
+            display: flex; align-items: center; justify-content: center; font-size: 15px;
         }
 
-        /* ── Footer note ──────────────────────────────────────── */
+        /* Messages */
+        .chat-msgs {
+            flex: 1; overflow-y: auto;
+            padding: 18px;
+            display: flex; flex-direction: column; gap: 12px;
+            background: var(--sand);
+        }
+        .msg {
+            max-width: 82%; padding: 11px 14px;
+            border-radius: 16px; font-size: 14px; line-height: 1.5;
+            white-space: pre-wrap; word-wrap: break-word;
+            animation: pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        @keyframes pop {
+            from { opacity: 0; transform: translateY(6px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .msg.user {
+            align-self: flex-end;
+            background: var(--pool); color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+        .msg.bot {
+            align-self: flex-start;
+            background: #fff; color: var(--ink);
+            border: 1px solid rgba(26,35,49,0.08);
+            border-bottom-left-radius: 5px;
+        }
+        .msg.bot a { color: var(--pool-deep); }
+
+        /* Typing dots */
+        .msg.typing { display: flex; gap: 4px; align-items: center; }
+        .msg.typing span {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--pool);
+            animation: blink 1.4s infinite both;
+        }
+        .msg.typing span:nth-child(2) { animation-delay: 0.2s; }
+        .msg.typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+
+        /* Input */
+        .chat-input {
+            display: flex; gap: 8px;
+            padding: 12px; flex-shrink: 0;
+            background: #fff;
+            border-top: 1px solid rgba(26,35,49,0.08);
+        }
+        .chat-input input {
+            flex: 1; padding: 11px 15px;
+            border: 1px solid rgba(26,35,49,0.15);
+            border-radius: 22px; font-size: 14px;
+            font-family: inherit; outline: none; color: var(--ink);
+            transition: border-color 0.2s;
+        }
+        .chat-input input:focus { border-color: var(--pool); }
+        .chat-input button {
+            padding: 0 20px; border: none;
+            background: var(--pool); color: #fff;
+            border-radius: 22px; cursor: pointer;
+            font-size: 14px; font-weight: 600; font-family: inherit;
+            transition: background 0.2s;
+        }
+        .chat-input button:hover { background: var(--pool-deep); }
+        .chat-input button:disabled { opacity: 0.5; cursor: default; }
+
+        /* Footer note */
         .footer-note {
-            margin-top: 18px;
-            font-size: 0.78rem;
+            margin-top: 18px; font-size: 0.78rem;
             color: rgba(255,255,255,0.7);
-            position: relative;
-            z-index: 5;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-align: center;
+            position: relative; z-index: 5;
+            display: inline-flex; align-items: center; gap: 8px; text-align: center;
         }
         .footer-note .dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: #4ade80;
+            width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
             box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
             animation: pulse 2s ease-in-out infinite;
         }
@@ -224,13 +236,11 @@
             100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
         }
 
-        /* ── Mobile ──────────────────────────────────────────── */
         @media (max-width: 600px) {
             .hero { margin-bottom: 16px; }
             .hero h1 { font-size: 1.8rem; }
             .hero p { font-size: 0.95rem; }
             .portal-frame { height: 540px; max-height: 65vh; }
-            /* Stack the split vertically on mobile so both images are visible */
             .bg-swim { clip-path: polygon(0 0, 100% 0, 100% 38%, 0 62%); }
             .bg-gym  { clip-path: polygon(0 62%, 100% 38%, 100% 100%, 0 100%); }
             .tint-swim { clip-path: polygon(0 0, 100% 0, 100% 38%, 0 62%); }
@@ -240,38 +250,96 @@
 </head>
 <body>
 
-    <!-- ── Background layers ──────────────────────────────────── -->
     <div class="bg-img bg-swim"></div>
     <div class="bg-img bg-gym"></div>
     <div class="tint tint-swim"></div>
     <div class="tint tint-gym"></div>
     <div class="vignette"></div>
 
-    <!-- ── Hero ───────────────────────────────────────────────── -->
     <div class="hero">
         <span class="wave" aria-hidden="true">👋</span>
         <h1>Hello — got a <span class="accent">question?</span></h1>
         <p>Whether it's about <span class="pill">🏊 swim</span> or <span class="pill">💪 gym</span>, have a chat with Arena Scout below.</p>
     </div>
 
-    <!-- ── Chat portal ────────────────────────────────────────── -->
+    <!-- Chat portal — custom UI talking to the Scout proxy -->
     <div class="portal-frame">
-        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-        <df-messenger
-          location="us-central1"
-          project-id="arena-scout-492406"
-          agent-id="82b6f6fc-d24e-46bb-a464-70224b797172"
-          language-code="en"
-          max-query-length="-1"
-          allow-unauthenticated="true">
-          <df-messenger-chat chat-title="Arena Scout" intent="WELCOME"></df-messenger-chat>
-        </df-messenger>
+        <div class="chat-head">
+            <span class="av">🤿</span>
+            <span>Arena Scout</span>
+        </div>
+        <div class="chat-msgs" id="msgs"></div>
+        <div class="chat-input">
+            <input id="inp" type="text" placeholder="Type a message…" autocomplete="off"/>
+            <button id="snd">Send</button>
+        </div>
     </div>
 
     <div class="footer-note">
         <span class="dot"></span>
         Scout is online and ready to help
     </div>
+
+    <script>
+    (function () {
+        var PROXY = "https://us-central1-arena-scout-492406.cloudfunctions.net/arena-scout-proxy";
+        var userId = "web-" + Math.random().toString(36).slice(2, 10);
+        var sessionId = "";
+
+        var msgs = document.getElementById("msgs");
+        var inp = document.getElementById("inp");
+        var snd = document.getElementById("snd");
+
+        function add(text, who) {
+            var d = document.createElement("div");
+            d.className = "msg " + who;
+            d.textContent = text;
+            msgs.appendChild(d);
+            msgs.scrollTop = msgs.scrollHeight;
+            return d;
+        }
+
+        // Greeting
+        add("Hey there! Welcome to Northern Arena. I'm the Scout — gym or swim school questions, fire away!", "bot");
+
+        function send() {
+            var text = inp.value.trim();
+            if (!text) return;
+            add(text, "user");
+            inp.value = "";
+            snd.disabled = true;
+
+            var typing = document.createElement("div");
+            typing.className = "msg bot typing";
+            typing.innerHTML = "<span></span><span></span><span></span>";
+            msgs.appendChild(typing);
+            msgs.scrollTop = msgs.scrollHeight;
+
+            fetch(PROXY, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text, user_id: userId, session_id: sessionId })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                typing.remove();
+                if (data.session_id) sessionId = data.session_id;
+                add(data.response || data.error || "Sorry, something went wrong.", "bot");
+                snd.disabled = false;
+                inp.focus();
+            })
+            .catch(function () {
+                typing.remove();
+                add("Sorry, I couldn't connect. Please try again.", "bot");
+                snd.disabled = false;
+            });
+        }
+
+        snd.onclick = send;
+        inp.addEventListener("keydown", function (e) { if (e.key === "Enter") send(); });
+        inp.focus();
+    })();
+    </script>
 
 </body>
 </html>
