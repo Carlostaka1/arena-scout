@@ -290,10 +290,26 @@
         var inp = document.getElementById("inp");
         var snd = document.getElementById("snd");
 
+        function escapeHtml(s) {
+            return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function linkify(s) {
+            return escapeHtml(s).replace(/(https?:\/\/[^\s]+)/g, function (url) {
+                var clean = url.replace(/[.,!?]+$/, "");
+                var trail = url.slice(clean.length);
+                return '<a href="' + clean + '" target="_blank" rel="noopener">' + clean + '</a>' + trail;
+            });
+        }
+
         function add(text, who) {
             var d = document.createElement("div");
             d.className = "msg " + who;
-            d.textContent = text;
+            if (who === "bot") {
+                d.innerHTML = linkify(text);
+            } else {
+                d.textContent = text;
+            }
             msgs.appendChild(d);
             msgs.scrollTop = msgs.scrollHeight;
             return d;
