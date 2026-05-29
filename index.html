@@ -41,7 +41,6 @@
             position: relative;
         }
 
-        /* Split background images */
         .bg-img {
             position: fixed;
             inset: 0;
@@ -78,7 +77,6 @@
             background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 100%);
         }
 
-        /* Hero copy */
         .hero {
             text-align: center;
             color: var(--sand);
@@ -125,7 +123,6 @@
             border-radius: 999px; font-weight: 600; font-size: 0.95em; color: #ffffff;
         }
 
-        /* Chat portal */
         .portal-frame {
             position: relative; z-index: 5;
             width: 420px; height: 560px;
@@ -137,7 +134,6 @@
             animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        /* Chat header */
         .chat-head {
             background: var(--ink);
             color: #fff;
@@ -153,13 +149,13 @@
             display: flex; align-items: center; justify-content: center; font-size: 15px;
         }
 
-        /* Messages */
         .chat-msgs {
             flex: 1; overflow-y: auto;
             padding: 18px;
-            display: flex; flex-direction: column; gap: 12px;
+            display: flex; flex-direction: column; gap: 10px;
             background: var(--sand);
         }
+
         .msg {
             max-width: 82%; padding: 11px 14px;
             border-radius: 16px; font-size: 14px; line-height: 1.5;
@@ -183,8 +179,36 @@
         }
         .msg.bot a { color: var(--pool-deep); }
 
+        /* Button chips */
+        .btn-group {
+            align-self: flex-start;
+            display: flex; flex-wrap: wrap; gap: 8px;
+            max-width: 100%;
+            animation: pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .btn-chip {
+            padding: 8px 14px;
+            border: 1.5px solid var(--pool);
+            border-radius: 20px;
+            background: #fff;
+            color: var(--pool);
+            font-size: 13px; font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, transform 0.1s;
+            white-space: nowrap;
+        }
+        .btn-chip:hover {
+            background: var(--pool); color: #fff;
+            transform: translateY(-1px);
+        }
+        .btn-chip:active { transform: translateY(0); }
+        .btn-chip.used {
+            opacity: 0.4; cursor: default; pointer-events: none;
+        }
+
         /* Typing dots */
-        .msg.typing { display: flex; gap: 4px; align-items: center; }
+        .msg.typing { display: flex; gap: 4px; align-items: center; padding: 14px; }
         .msg.typing span {
             width: 7px; height: 7px; border-radius: 50%; background: var(--pool);
             animation: blink 1.4s infinite both;
@@ -193,7 +217,6 @@
         .msg.typing span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
 
-        /* Input */
         .chat-input {
             display: flex; gap: 8px;
             padding: 12px; flex-shrink: 0;
@@ -218,7 +241,6 @@
         .chat-input button:hover { background: var(--pool-deep); }
         .chat-input button:disabled { opacity: 0.5; cursor: default; }
 
-        /* Footer note */
         .footer-note {
             margin-top: 18px; font-size: 0.78rem;
             color: rgba(255,255,255,0.7);
@@ -262,7 +284,6 @@
         <p>Whether it's about <span class="pill">🏊 swim</span> or <span class="pill">💪 gym</span>, have a chat with Arena Scout below.</p>
     </div>
 
-    <!-- Chat portal — custom UI talking to the Scout proxy -->
     <div class="portal-frame">
         <div class="chat-head">
             <span class="av">🤿</span>
@@ -287,22 +308,42 @@
         var sessionId = "";
 
         var msgs = document.getElementById("msgs");
-        var inp = document.getElementById("inp");
-        var snd = document.getElementById("snd");
+        var inp  = document.getElementById("inp");
+        var snd  = document.getElementById("snd");
 
+        // ── helpers ──────────────────────────────────────────────
         function escapeHtml(s) {
-            return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+            return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
         }
 
         function linkify(s) {
-            return escapeHtml(s).replace(/(https?:\/\/[^\s]+)/g, function (url) {
+            return escapeHtml(s).replace(/(https?:\/\/[^\s]+)/g, function(url) {
                 var clean = url.replace(/[.,!?]+$/, "");
                 var trail = url.slice(clean.length);
                 return '<a href="' + clean + '" target="_blank" rel="noopener">' + clean + '</a>' + trail;
             });
         }
 
-        function add(text, who) {
+        // Parse [[BUTTONS]]..[[/BUTTONS]] blocks out of a bot message.
+        // Returns { text: string, buttons: string[] }
+        function parseButtons(raw) {
+            var btnRe = /\[\[BUTTONS\]\]([\s\S]*?)\[\[\/BUTTONS\]\]/g;
+            var buttons = [];
+            var text = raw.replace(btnRe, function(_, inner) {
+                inner.split("\n").forEach(function(line) {
+                    var l = line.trim();
+                    if (l) buttons.push(l);
+                });
+                return "";
+            }).trim();
+            return { text: text, buttons: buttons };
+        }
+
+        function scrollBottom() {
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function addMsg(text, who) {
             var d = document.createElement("div");
             d.className = "msg " + who;
             if (who === "bot") {
@@ -311,17 +352,57 @@
                 d.textContent = text;
             }
             msgs.appendChild(d);
-            msgs.scrollTop = msgs.scrollHeight;
+            scrollBottom();
             return d;
         }
 
-        // Greeting
-        add("Hey there! Welcome to Northern Arena. I'm the Scout — do you have gym inquiries, or were you after swim school details?\n\n🇳🇿 🇨🇳 🇰🇷 🇮🇳 🇵🇭 🇧🇷 🇪🇸  Chat in your language!", "bot");
+        function addButtons(options) {
+            var group = document.createElement("div");
+            group.className = "btn-group";
+            options.forEach(function(label) {
+                var btn = document.createElement("button");
+                btn.className = "btn-chip";
+                btn.textContent = label;
+                btn.addEventListener("click", function() {
+                    // Mark all chips in this group as used
+                    group.querySelectorAll(".btn-chip").forEach(function(c) {
+                        c.classList.add("used");
+                    });
+                    sendMessage(label);
+                });
+                group.appendChild(btn);
+            });
+            msgs.appendChild(group);
+            scrollBottom();
+            return group;
+        }
 
-        function send() {
-            var text = inp.value.trim();
+        function addBotResponse(raw) {
+            var parsed = parseButtons(raw);
+            if (parsed.text) addMsg(parsed.text, "bot");
+            if (parsed.buttons.length) addBotButtons(parsed.buttons);
+        }
+
+        // keep a ref to the latest button group so we can disable it on next send
+        var lastBtnGroup = null;
+        function addBotButtons(options) {
+            lastBtnGroup = addButtons(options);
+        }
+
+        function disableLastButtons() {
+            if (lastBtnGroup) {
+                lastBtnGroup.querySelectorAll(".btn-chip").forEach(function(c) {
+                    c.classList.add("used");
+                });
+                lastBtnGroup = null;
+            }
+        }
+
+        // ── send ─────────────────────────────────────────────────
+        function sendMessage(text) {
             if (!text) return;
-            add(text, "user");
+            disableLastButtons();
+            addMsg(text, "user");
             inp.value = "";
             snd.disabled = true;
 
@@ -329,30 +410,35 @@
             typing.className = "msg bot typing";
             typing.innerHTML = "<span></span><span></span><span></span>";
             msgs.appendChild(typing);
-            msgs.scrollTop = msgs.scrollHeight;
+            scrollBottom();
 
             fetch(PROXY, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message: text, user_id: userId, session_id: sessionId })
             })
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
                 typing.remove();
                 if (data.session_id) sessionId = data.session_id;
-                add(data.response || data.error || "Sorry, something went wrong.", "bot");
+                var response = data.response || data.error || "Sorry, something went wrong.";
+                addBotResponse(response);
                 snd.disabled = false;
                 inp.focus();
             })
-            .catch(function () {
+            .catch(function() {
                 typing.remove();
-                add("Sorry, I couldn't connect. Please try again.", "bot");
+                addMsg("Sorry, I couldn't connect. Please try again.", "bot");
                 snd.disabled = false;
             });
         }
 
-        snd.onclick = send;
-        inp.addEventListener("keydown", function (e) { if (e.key === "Enter") send(); });
+        // ── greeting ─────────────────────────────────────────────
+        addBotResponse("Hey there! Welcome to Northern Arena. I'm the Scout — do you have gym inquiries, or were you after swim school details?\n\n🇳🇿 🇨🇳 🇰🇷 🇮🇳 🇵🇭 🇧🇷 🇪🇸  Chat in your language!\n\n[[BUTTONS]]\n🏊 Swim school\n🏋️ Gym\n👤 Talk to a person\n[[/BUTTONS]]");
+
+        // ── events ───────────────────────────────────────────────
+        snd.onclick = function() { sendMessage(inp.value.trim()); };
+        inp.addEventListener("keydown", function(e) { if (e.key === "Enter") sendMessage(inp.value.trim()); });
         inp.focus();
     })();
     </script>
