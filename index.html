@@ -158,8 +158,8 @@
 
         .msg {
             max-width: 82%; padding: 11px 14px;
-            border-radius: 16px; font-size: 14px; line-height: 1.5;
-            white-space: pre-wrap; word-wrap: break-word;
+            border-radius: 16px; font-size: 14px; line-height: 1.6;
+            word-wrap: break-word;
             animation: pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
         @keyframes pop {
@@ -170,6 +170,7 @@
             align-self: flex-end;
             background: var(--pool); color: #fff;
             border-bottom-right-radius: 5px;
+            white-space: pre-wrap;
         }
         .msg.bot {
             align-self: flex-start;
@@ -178,6 +179,74 @@
             border-bottom-left-radius: 5px;
         }
         .msg.bot a { color: var(--pool-deep); }
+
+        /* Formatted bot message styles */
+        .msg.bot p {
+            margin: 0 0 8px 0;
+        }
+        .msg.bot p:last-child {
+            margin-bottom: 0;
+        }
+        .msg.bot ul {
+            margin: 6px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+        .msg.bot ul li {
+            padding: 5px 0 5px 0;
+            border-bottom: 1px solid rgba(26,35,49,0.06);
+            line-height: 1.5;
+        }
+        .msg.bot ul li:last-child {
+            border-bottom: none;
+        }
+        .msg.bot .option-block {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(26,35,49,0.07);
+        }
+        .msg.bot .option-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .msg.bot .option-block:first-child {
+            padding-top: 0;
+        }
+        .msg.bot .option-title {
+            font-weight: 700;
+            color: var(--pool-deep);
+            display: block;
+            margin-bottom: 2px;
+        }
+        .msg.bot .option-detail {
+            font-size: 12.5px;
+            color: rgba(26,35,49,0.65);
+            display: block;
+        }
+        .msg.bot .section-label {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--ink);
+        }
+        .msg.bot .time-block {
+            margin-bottom: 10px;
+        }
+        .msg.bot .time-block:last-child {
+            margin-bottom: 0;
+        }
+        .msg.bot .time-label {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--pool-deep);
+            display: block;
+            margin-bottom: 3px;
+        }
+        .msg.bot .time-detail {
+            font-size: 13px;
+            color: rgba(26,35,49,0.75);
+            display: block;
+            padding-left: 10px;
+        }
 
         /* Button chips */
         .btn-group {
@@ -317,15 +386,72 @@
         }
 
         function linkify(s) {
-            return escapeHtml(s).replace(/(https?:\/\/[^\s]+)/g, function(url) {
+            return s.replace(/(https?:\/\/[^\s<]+)/g, function(url) {
                 var clean = url.replace(/[.,!?]+$/, "");
                 var trail = url.slice(clean.length);
                 return '<a href="' + clean + '" target="_blank" rel="noopener">' + clean + '</a>' + trail;
             });
         }
 
+        // Format bot message markdown into readable HTML
+        function formatBotText(raw) {
+            var html = '';
+            var lines = raw.split('\n');
+            var i = 0;
+
+            while (i < lines.length) {
+                var line = lines[i].trim();
+
+                // Skip empty lines between blocks
+                if (!line) { i++; continue; }
+
+                // Option block: 🔹 Title — $X
+                if (/^🔹/.test(line)) {
+                    html += '<div class="option-block">';
+                    html += '<span class="option-title">' + escapeHtml(line) + '</span>';
+                    // Next non-empty line is the detail (e.g. "12 month min · ...")
+                    if (i+1 < lines.length && lines[i+1].trim() && !/^🔹/.test(lines[i+1].trim()) && !/^\*/.test(lines[i+1].trim()) && !/^-/.test(lines[i+1].trim())) {
+                        i++;
+                        html += '<span class="option-detail">' + escapeHtml(lines[i].trim()) + '</span>';
+                    }
+                    html += '</div>';
+                    i++;
+                    continue;
+                }
+
+                // Bullet: * or - 
+                if (/^[\*\-] /.test(line)) {
+                    html += '<ul>';
+                    while (i < lines.length && /^[\*\-] /.test(lines[i].trim())) {
+                        var item = lines[i].trim().replace(/^[\*\-] /, '');
+                        // Bold: **text**
+                        item = item.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        item = linkify(escapeHtml(item).replace(/&lt;strong&gt;/g,'<strong>').replace(/&lt;\/strong&gt;/g,'</strong>'));
+                        html += '<li>' + item + '</li>';
+                        i++;
+                    }
+                    html += '</ul>';
+                    continue;
+                }
+
+                // Section label ending with colon (e.g. "💰 Here are your options (per week):")
+                if (/:$/.test(line) && line.length < 80) {
+                    html += '<span class="section-label">' + escapeHtml(line) + '</span>';
+                    i++;
+                    continue;
+                }
+
+                // Regular paragraph line
+                var para = escapeHtml(line).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                para = linkify(para);
+                html += '<p>' + para + '</p>';
+                i++;
+            }
+
+            return html;
+        }
+
         // Parse [[BUTTONS]]..[[/BUTTONS]] blocks out of a bot message.
-        // Returns { text: string, buttons: string[] }
         function parseButtons(raw) {
             var btnRe = /\[\[BUTTONS\]\]([\s\S]*?)\[\[\/BUTTONS\]\]/g;
             var buttons = [];
@@ -347,7 +473,7 @@
             var d = document.createElement("div");
             d.className = "msg " + who;
             if (who === "bot") {
-                d.innerHTML = linkify(text);
+                d.innerHTML = formatBotText(text);
             } else {
                 d.textContent = text;
             }
@@ -356,7 +482,7 @@
             return d;
         }
 
-        // URL buttons — tapping opens a URL directly instead of sending a message
+        // URL buttons
         var URL_BUTTONS = {
             "Join the waitlist 🎉": "https://portal.iclasspro.com/northernarena/camps/5?sortBy=time",
             "Join online": "https://www.northernarena.co.nz/memberships",
@@ -394,7 +520,6 @@
             if (parsed.buttons.length) addBotButtons(parsed.buttons);
         }
 
-        // keep a ref to the latest button group so we can disable it on next send
         var lastBtnGroup = null;
         function addBotButtons(options) {
             lastBtnGroup = addButtons(options);
@@ -445,7 +570,7 @@
         }
 
         // ── greeting ─────────────────────────────────────────────
-        addBotResponse("Hi! I'm Coach Mark from Northern Arena. Can I help with Gym or Swim? 🇳🇿 🇨🇳 🇰🇷 🇮🇳 🇵🇭 🇧🇷 🇪🇸 Chat in your language!\n\n[[BUTTONS]]\n🏊 Swim school\n🏋️ Gym\n[[/BUTTONS]]");
+        addBotResponse("Hi! I'm Arena Scout from Northern Arena. Can I help with Gym or Swim? 🇳🇿 🇨🇳 🇰🇷 🇮🇳 🇵🇭 🇧🇷 🇪🇸 Chat in your language!\n\n[[BUTTONS]]\n🏊 Swim school\n🏋️ Gym\n[[/BUTTONS]]");
 
         // ── events ───────────────────────────────────────────────
         snd.onclick = function() { sendMessage(inp.value.trim()); };
