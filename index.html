@@ -418,7 +418,7 @@
         }
 
         // Initial greeting
-        addBotResponse("Hi! I'm Arena Scout from Northern Arena. Can I help with Gym or Swim? 🇳🇿 🇨🇳 🇰🇷 🇮🇳 🇵🇭 🇧🇷 🇪🇸 Chat in your language!\n\n[[BUTTONS]]\n🏊 Swim school\n🏋️ Gym\n[[/BUTTONS]]");
+        addBotResponse("Hi! I'm Arena Scout from Northern Arena. Can I help with Gym or Swim? 🌏 Chat in your language — English · 中文 · 한국어 · हिन्दी · Filipino · Português · Español\n\n[[BUTTONS]]\n🏊 Swim school\n🏋️ Gym\n[[/BUTTONS]]");
 
         snd.onclick = function() { sendMessage(inp.value.trim()); };
         inp.addEventListener("keydown", function(e) { if (e.key === "Enter") sendMessage(inp.value.trim()); });
